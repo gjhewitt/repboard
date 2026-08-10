@@ -22,7 +22,6 @@ gem "appdev_support"                  # Learning helpers (nicer error messages, 
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude" # Ruby debugger
   gem "rspec-rails", "~> 7.1.1"       # Testing framework
-  gem "grade_runner", "~> 0.0.15" # Automated grading
   gem "rubocop-rails-omakase", require: false
 end
 
