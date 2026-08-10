@@ -13,12 +13,13 @@ task({ sample_data: :environment }) do
   User.destroy_all
 
   puts "Creating demo admin account..."
-  User.create!(
+  demo = User.create!(
     email: "demo@repboard.com",
     password: "password123",
     display_name: "Demo Admin",
     bio: "Personal demo account — use email demo@repboard.com / password123 to log in.",
-    reviewable: false
+    reviewable: true,
+    avatar_url: "https://i.pravatar.cc/300?img=16"
   )
 
   puts "Creating freelancers..."
@@ -37,7 +38,7 @@ task({ sample_data: :environment }) do
 
   puts "Creating portfolio links..."
   link_labels = ["Portfolio", "LinkedIn", "GitHub", "Twitter", "Personal Site", "Blog"]
-  freelancers.each do |user|
+  (freelancers + [demo]).each do |user|
     rand(2..4).times do |idx|
       Link.create!(
         user: user,
@@ -59,13 +60,36 @@ task({ sample_data: :environment }) do
     )
   end
 
+  puts "Creating reviews received by the demo account..."
+  freelancers.sample(8).each do |reviewer|
+    Review.create!(
+      reviewer: reviewer,
+      reviewee: demo,
+      stars: rand(3..5),
+      body: Faker::Lorem.paragraph(sentence_count: rand(2..6))
+    )
+  end
+
+  puts "Creating reviews given by the demo account..."
+  freelancers.sample(5).each do |reviewee|
+    Review.create!(
+      reviewer: demo,
+      reviewee: reviewee,
+      stars: rand(3..5),
+      body: Faker::Lorem.paragraph(sentence_count: rand(2..6))
+    )
+  end
+
+  puts "Flagging a few reviews so the moderation UI has something to act on..."
+  demo.reviews_received.limit(3).each(&:flagged!)
+
   ending = Time.now
 
   puts
   puts "Sample data created in #{(ending - starting).round(1)} seconds:"
   puts "  - #{User.count} users (1 demo admin + 15 freelancers)"
   puts "  - #{Link.count} portfolio links"
-  puts "  - #{Review.count} reviews"
+  puts "  - #{Review.count} reviews (#{Review.flagged.count} flagged)"
   puts
   puts "Log in with demo@repboard.com / password123"
 end
