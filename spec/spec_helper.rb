@@ -4,8 +4,6 @@ require "#{File.expand_path("../support/webmock", __FILE__)}"
 
 # GradeRunner updates on https://github.com/firstdraft/grade_runner/pull/88
 # make the formatters available from within the grade_runner gem
-require "grade_runner/formatters/json_output_formatter"
-require "grade_runner/formatters/hint_formatter"
 # require "#{File.expand_path("../support/json_output_formatter", __FILE__)}"
 # require "#{File.expand_path("../support/hint_formatter", __FILE__)}"
 
