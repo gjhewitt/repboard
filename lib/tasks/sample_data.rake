@@ -37,8 +37,8 @@ task({ sample_data: :environment }) do
   end
 
   puts "Creating portfolio links..."
-  link_labels = ["Portfolio", "LinkedIn", "GitHub", "Twitter", "Personal Site", "Blog"]
-  (freelancers + [demo]).each do |user|
+  link_labels = [ "Portfolio", "LinkedIn", "GitHub", "Twitter", "Personal Site", "Blog" ]
+  (freelancers + [ demo ]).each do |user|
     rand(2..4).times do |idx|
       Link.create!(
         user: user,

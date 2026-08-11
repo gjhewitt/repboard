@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :moderate]
+  before_action :authenticate_user!, only: [ :create, :destroy, :moderate ]
 
   def create
     service = CreateReview.new(**review_params.to_h.symbolize_keys, reviewer: current_user)

@@ -21,6 +21,6 @@ class UpgradeReviewForeignKeys < ActiveRecord::Migration[8.0]
 
     # 4. Enforce "one review per reviewer per reviewee" at the database level,
     #    backing up the validation that already exists in the model.
-    add_index :reviews, [:reviewer_id, :reviewee_id], unique: true
+    add_index :reviews, [ :reviewer_id, :reviewee_id ], unique: true
   end
 end
