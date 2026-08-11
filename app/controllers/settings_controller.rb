@@ -18,6 +18,6 @@ class SettingsController < ApplicationController
   private
 
   def settings_params
-    params.require(:user).permit(:avatar_url, :display_name, :bio, links_attributes: [:id, :label, :url, :position, "_destroy"])
+    params.require(:user).permit(:avatar_url, :display_name, :bio, links_attributes: [ :id, :label, :url, :position, "_destroy" ])
   end
 end
