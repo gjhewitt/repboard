@@ -40,3 +40,6 @@ examples.txt
 # Ignore public uploads
 /public/uploads/*
 /vendor/bundle
+
+# Claude Code
+.claude/
