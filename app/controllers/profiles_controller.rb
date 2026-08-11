@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
     if @freelancer.nil?
       redirect_to root_path, alert: "Profile not found."
     else
-      @reviews = @freelancer.reviews_received.published.recent
+      @reviews = @freelancer.public_reviews.includes(:reviewer).recent
       @new_review = Review.new
     end
   end

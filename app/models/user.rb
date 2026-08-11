@@ -38,15 +38,19 @@ class User < ApplicationRecord
 
   has_many :reviews_given, class_name: "Review", foreign_key: "reviewer_id", dependent: :destroy
   has_many :reviews_received, class_name: "Review", foreign_key: "reviewee_id", dependent: :destroy
+  # Reviews a visitor can see. Excludes hidden and flagged rows, so public rating stats can't disagree with the list rendered on the profile page.
+  has_many :public_reviews,
+           -> { published },
+           class_name: "Review", foreign_key: :reviewee_id, inverse_of: :reviewee
 
   has_many :links, dependent: :destroy
   accepts_nested_attributes_for :links, allow_destroy: true, reject_if: :all_blank
 
   def average_rating
-    reviews_received.average(:stars)&.round(1)
+    public_reviews.average(:stars)&.round(1)
   end
 
   def review_count
-    reviews_received.count
+    public_reviews.count
   end
 end
