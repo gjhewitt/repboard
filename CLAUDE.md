@@ -125,4 +125,4 @@ RSpec is configured (`spec/rails_helper.rb`, Capybara + headless Chrome for feat
 
 ## Other repo docs
 
-`FIXES.md` and `RUBRIC_REVIEW.md` are point-in-time bootcamp deliverables (a prioritized fix list and a grading rubric review) — useful for historical context but not kept in sync with the code; verify against the current source (e.g. the non-RESTful-routes issue in `FIXES.md` no longer matches `config/routes.rb`) before acting on anything in them.
+`docs/FIXES.md` and `docs/RUBRIC_REVIEW.md` are point-in-time bootcamp deliverables (a prioritized fix list and a grading rubric review) — useful for historical context but not kept in sync with the code; verify against the current source (e.g. the non-RESTful-routes issue in `docs/FIXES.md` no longer matches `config/routes.rb`) before acting on anything in them. Both carry a "Historical" header marking them unmaintained.

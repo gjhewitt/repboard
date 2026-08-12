@@ -18,7 +18,7 @@ A portable reputation platform that lets freelancers collect structured client f
 
 1. **Clone the repo**
 ```bash
-   git clone https://github.com/ghewitt95/repboard.git
+   git clone https://github.com/gjhewitt/repboard.git
    cd repboard
 ```
 
