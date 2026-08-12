@@ -23,6 +23,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude" # Ruby debugger
   gem "rspec-rails", "~> 7.1.1"       # Testing framework
   gem "rubocop-rails-omakase", require: false
+  gem "brakeman", require: false # Static security scanner
 end
 
 group :development do

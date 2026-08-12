@@ -92,6 +92,8 @@ GEM
       debug_inspector (>= 1.2.0)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
+    brakeman (8.0.5)
+      racc
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -496,6 +498,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootsnap
+  brakeman
   capybara
   chartkick (~> 5.2)
   debug
