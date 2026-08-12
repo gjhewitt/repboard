@@ -1,0 +1,58 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 122,
+      "fingerprint": "21ab0fe00fdd5899ffc405cff75aadb91b805ee996a614f7e27b08a287e9062d",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 8.0.2 ends on 2026-10-07",
+      "file": "Gemfile.lock",
+      "line": 288,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        1104
+      ],
+      "note": "Advisory, not a vulnerability. Rails 8.0 series reaches EOL 2026-10-07. Upgrade to 8.1 tracked separately. Revisit before 2026-10-01."
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "7da408ddbbb35c71a150ce94c7901179940bd5dd50479879e9987eb112519466",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/profiles/show.html.erb",
+      "line": 24,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to((Unresolved Model).new.label, (Unresolved Model).new.url, :target => \"_blank\", :rel => \"noopener\", :class => \"btn btn-sm me-2 mb-2\", :style => \"border-color: #028090; color: #028090;\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ProfilesController",
+          "method": "show",
+          "line": 7,
+          "file": "app/controllers/profiles_controller.rb",
+          "rendered": {
+            "name": "profiles/show",
+            "file": "app/views/profiles/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "profiles/show"
+      },
+      "user_input": "(Unresolved Model).new.url",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": "URL is user-supplied but validated at the model to require an http:// or https:// prefix with no whitespace, so javascript: and data: schemes cannot be persisted. Rendered with rel=noopener. Revisit if that validation changes."
+    }
+  ],
+  "brakeman_version": "8.0.5"
+}
