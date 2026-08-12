@@ -1,3 +1,7 @@
+> **Historical.** Written during the firstdraft capstone and not maintained.
+> URLs and file references in this document may be stale. Verify against the
+> current source before acting on anything here.
+
 # RepBoard — Prioritized Improvement Plan
 
 ## P0 — Critical (Security / Architecture / Broken Patterns)

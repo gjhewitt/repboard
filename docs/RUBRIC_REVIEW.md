@@ -1,11 +1,15 @@
+> **Historical.** Written during the firstdraft capstone and not maintained.
+> URLs and file references in this document may be stale. Verify against the
+> current source before acting on anything here.
+
 # SDF Final Project Rubric - Technical
 
 - Date/Time: 2026-03-09
 - Trainee Name: Gabriel Hewitt
 - Project Name: RepBoard
 - Reviewer Name: Claude, Ian Heraty, Adolfo Nava
-- Repository URL: <https://github.com/ghewitt95/repboard>
-- Feedback Pull Request URL: <https://github.com/ghewitt95/repboard/pull/27>
+- Repository URL: <https://github.com/gjhewitt/repboard>
+- Feedback Pull Request URL: <https://github.com/gjhewitt/repboard/pull/27>
 
 ---
 
@@ -54,7 +58,7 @@ README covers the basics well but is incomplete. Missing contribution guidelines
   > Evidence: `.git/` directory present, 72 commits on `main` branch.
 
 - [x] **Repository Management**: Is the repository hosted on GitHub?
-  > Evidence: `README.md` references `https://github.com/ghewitt95/repboard`. Live demo links to `https://repboard.onrender.com`.
+  > Evidence: `README.md` references `https://github.com/gjhewitt/repboard`. Live demo links to `https://repboard.onrender.com`.
 
 - [x] **Commit Quality**: Does the project have regular commits with clear, descriptive messages?
   > Evidence: Commit messages include "Add Resend email configuration", "Style dashboard with teal theme and teal chart line", "Fix bugs and style client dashboard with teal theme", "Add avatar URL and profile links feature". 72 commits show consistent development activity.
@@ -63,12 +67,12 @@ README covers the basics well but is incomplete. Missing contribution guidelines
   > Evidence: Merge commits in history reference PR #24 (client-side validation), PR #25 (landing page stars), PR #26 (sample data), indicating feature branches were used and PRs were opened for merging.
 
 - [ ] **Issues**: Is the project utilizing issue tracking?
-  > <https://github.com/ghewitt95/repboard/issues>
+  > <https://github.com/gjhewitt/repboard/issues>
 
 - [ ] **Linked Issues**: Are issues linked to pull requests?
 
 - [x] **Project Board**: Does the project utilize a project board?
-  > <https://github.com/users/ghewitt95/projects/2>
+  > <https://github.com/users/gjhewitt/projects/2>
 
 - [ ] **Code Review Process**: Is there evidence of code review before merging?
   > Pull requests but no code review
