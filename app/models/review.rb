@@ -38,4 +38,19 @@ class Review < ApplicationRecord
   validates :stars, presence: true, inclusion: { in: 1..5 }
   validates :body, presence: true, length: { minimum: 10, maximum: 1000 }
   validates :reviewer_id, uniqueness: { scope: :reviewee_id, message: "you have already reviewed this freelancer" }
+
+  validate :reviewer_must_be_a_client
+  validate :reviewee_must_be_a_freelancer
+
+  private
+
+  def reviewer_must_be_a_client
+    return if reviewer.blank?
+    errors.add(:base, "Only clients can leave reviews") if reviewer.reviewable?
+  end
+
+  def reviewee_must_be_a_freelancer
+    return if reviewee.blank?
+    errors.add(:base, "You can only review freelancer accounts") unless reviewee.reviewable?
+  end
 end
