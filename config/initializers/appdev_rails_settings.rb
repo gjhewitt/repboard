@@ -14,4 +14,3 @@ end
 # Phase 1 beginner-friendly security settings
 # These relax Rails security defaults for learning purposes
 Rails.application.config.action_controller.default_protect_from_forgery = false
-Rails.application.config.active_record.belongs_to_required_by_default = false
