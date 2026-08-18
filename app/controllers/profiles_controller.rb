@@ -1,7 +1,6 @@
 class ProfilesController < ApplicationController
   def show
-    slug = params.fetch("slug")
-    @freelancer = User.find_by(slug: slug)
+    @freelancer = User.freelancers.find_by(slug: params[:slug])
 
     if @freelancer.nil?
       redirect_to root_path, alert: "Profile not found."

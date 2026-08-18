@@ -45,6 +45,7 @@ class User < ApplicationRecord
 
   has_many :links, dependent: :destroy
   accepts_nested_attributes_for :links, allow_destroy: true, reject_if: :all_blank
+  scope :freelancers, -> { where(reviewable: true) }
 
   def average_rating
     public_reviews.average(:stars)&.round(1)
