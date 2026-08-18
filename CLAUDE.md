@@ -28,14 +28,13 @@ RepBoard is a Rails 8 app where freelancers collect structured client feedback a
 - DB: `bin/rails db:create db:migrate db:seed`
 - Tests: `bundle exec rspec` (single file: `bundle exec rspec spec/path/to_spec.rb`, single line: `bundle exec rspec spec/path/to_spec.rb:23`)
 - Lint: `bin/rubocop` (Rails Omakase style — see `.rubocop.yml` for the small set of overrides: old hash syntax allowed, space inside parens allowed)
-- Security scan: `bin/brakeman` (add `--no-pager` for non-interactive output).
-  Exits non-zero when it reports findings, so it doubles as a CI gate. Triaged
-  false positives live in `config/brakeman.ignore` — see Architecture.
-- CI (`.github/workflows/ci.yml`) runs three jobs on push/PR: `scan_ruby`
-  (brakeman), `scan_js` (`importmap audit`), and `lint` (`bin/rubocop`).
-  **There is no test job — RSpec never runs in CI**, so a green checkmark says
-  nothing about the suite. Adding one is only worth it once the suite has real
-  specs (see Testing notes).
+- Security scan: `bin/brakeman` — **currently broken.** The binstub exists but the
+  `brakeman` gem is in neither `Gemfile` nor `Gemfile.lock`, so the command fails.
+  Add `gem "brakeman", require: false` to the `:development` group before relying
+  on it, or before enabling the CI job that calls it.
+- CI (`.github/workflows/ci.yml`) is a disabled placeholder — brakeman /
+  importmap-audit / rubocop jobs exist but are all commented out. The only active
+  job echoes "CI jobs disabled". Green checkmarks on GitHub currently mean nothing.
 
 ### Seed data — three tasks, two of them destructive
 
@@ -94,30 +93,30 @@ real deploy path. Ignore it.
 
 **Review lifecycle uses an enum status, not soft-delete.** `Review#status` is `published` / `flagged` / `hidden` (default `published`). `ReviewsController#moderate` lets the reviewee (not the reviewer) change status — this is how a freelancer flags/hides a bad review rather than deleting it; `#destroy` is reserved for the reviewer removing their own review. Public profile pages only show `Review.published`.
 
-**"Publicly visible" is a scoped association, not a filter repeated per caller.** `User has_many :public_reviews, -> { published }` (`app/models/user.rb`) is the single definition of a review a visitor may see; `average_rating` and `review_count` both go through it, and `profiles#show` renders it. This exists because the stats and the rendered list previously used different scopes, so hiding a review didn't move the average. Follow the same shape for any future "which rows are public" question — put it on the association so every caller inherits one definition.
-
-**Counter caches.** `reviews_given_count`/`reviews_received_count` on `User` and `links_count` are Rails counter caches tied to the `belongs_to` associations on `Review`/`Link` — don't bypass `save`/`create` paths (e.g. bulk SQL) that would skip counter maintenance without also correcting counts. **Counter caches cannot be scoped**: they count every row regardless of `status`, which is why any "how many *published* reviews" question needs `public_reviews`, not the cached column.
+**Counter caches.** `reviews_given_count`/`reviews_received_count` on `User` and `links_count` are Rails counter caches tied to the `belongs_to` associations on `Review`/`Link` — don't bypass `save`/`create` paths (e.g. bulk SQL) that would skip counter maintenance without also correcting counts. **Counter caches cannot be scoped**: they count every row regardless of `status`, which is why any "how many *published* reviews" question needs a real query, not the cached column.
 
 **Routes are hand-written, not `resources`**, and intentionally partial: `POST /reviews`, `DELETE /reviews/:id`, `PATCH /reviews/:id/moderate` — there is no update or index route for reviews (edits aren't supported; reviews are shown inline on the reviewee's profile and in `/dashboard`/`/client-dashboard`).
 
 **Two dashboards, one for each side of the marketplace**: `DashboardController` (`/dashboard`) shows a freelancer their received reviews, with star-rating filtering, Kaminari pagination, and a Groupdate/Chartkick monthly average-rating chart. `ClientDashboardController` (`/client-dashboard`) shows a client the reviews they've given. Both require authentication; neither currently checks `reviewable` to gate which dashboard a user should see.
 
-**Frontend is server-rendered ERB + Bootstrap 5 + Stimulus**, no SPA framework. JS is managed via importmap (`config/importmap.rb`), pinned files live in `app/javascript/controllers`. In active use: `star_rating_controller.js` (interactive star input on the review form), `review_form_controller.js` (client-side validation, form submitted with `turbo: false`), `auto_submit_controller.js` (dashboard star filter), `clipboard_controller.js` (copy profile link). **Dead code:** `modal_controller.js` is referenced by no view and is written against Pico CSS, which this app does not use; `hello_controller.js` is leftover scaffolding. Both should be deleted, not wired up. **jQuery and `@rails/ujs` are also dead weight** — imported in `app/javascript/application.js` and pinned in `config/importmap.rb`, but no view uses `data-remote`, `data-confirm`, or `$()`. They ship on every page load for nothing; removing them means dropping both the imports and both pins.
-
-**Brakeman findings are triaged in `config/brakeman.ignore`, with written reasons.** Two warnings are suppressed: the Rails 8.0 EOL advisory, and the `link_to` href in `profiles/show.html.erb`. **The href justification depends on `Link#url`'s validation** (`%r{\Ahttps?://\S+\z}i` — anchored at both ends and case-insensitive, so `javascript:`/`data:` can't be persisted). Loosen that regex and the recorded justification silently becomes false; update the note in the same PR. Fingerprints are content-based, so editing the flagged line re-raises the warning — expected, re-triage rather than blanket-regenerating the file.
+**Frontend is server-rendered ERB + Bootstrap 5 + Stimulus**, no SPA framework. JS is managed via importmap (`config/importmap.rb`), pinned files live in `app/javascript/controllers`. In active use: `star_rating_controller.js` (interactive star input on the review form), `review_form_controller.js` (client-side validation, form submitted with `turbo: false`), `auto_submit_controller.js` (dashboard star filter), `clipboard_controller.js` (copy profile link). **Dead code:** `modal_controller.js` is referenced by no view and is written against Pico CSS, which this app does not use; `hello_controller.js` is leftover scaffolding. Both should be deleted, not wired up.
 
 **Solid stack for infra, no Redis.** `solid_cache`/`solid_queue`/`solid_cable` back cache, jobs, and Action Cable directly off Postgres (see `cache`/`queue`/`cable` entries under `production:` in `config/database.yml`, and `db/cache_schema.rb`/`db/queue_schema.rb`/`db/cable_schema.rb`, which are separate schemas from `db/schema.rb`).
 
 ## Known issues — do not replicate these patterns
 
-1. **N+1 on `client_dashboard#index`.** It loads `current_user.reviews_given` with
-   no `includes`, and `client_dashboard/index.html.erb` calls `review.reviewee`
-   twice per row (`display_name`, then `slug` for the share link). `profiles#show`
-   and `dashboard#index` were fixed with `includes(:reviewer)`; this one was
-   missed because the association points the other way.
-2. **`links.user_id` is nullable in the schema** while `Link belongs_to :user`
+1. **Public rating stats include non-public reviews.** `User#average_rating` and
+   `User#review_count` query `reviews_received`, which includes `hidden` and
+   `flagged` rows, while `profiles#show` renders only `published`. The header count
+   and the rendered list disagree, and hiding a review doesn't move the average.
+   Being fixed on branch `gh-scope-public-reviews`.
+2. **N+1 on reviewers.** Neither `profiles#show` nor `dashboard#index` eager-loads
+   `:reviewer`, and `_review.html.erb` calls `review.reviewer.display_name`. No
+   `includes` appears anywhere in `app/`.
+3. **`bin/brakeman` fails** — binstub without a gem. See Commands.
+4. **`links.user_id` is nullable in the schema** while `Link belongs_to :user`
    requires it. Add `null: false` to match the model.
-3. **`settings_controller` permits `_destroy`** and `User` sets
+5. **`settings_controller` permits `_destroy`** and `User` sets
    `allow_destroy: true`, but no view renders a destroy checkbox. Dead config.
 
 ## Testing notes
