@@ -10,7 +10,3 @@ Rails.application.configure do
     policy.frame_ancestors :self, "https://envoy.fyi"
   end
 end
-
-# Phase 1 beginner-friendly security settings
-# These relax Rails security defaults for learning purposes
-Rails.application.config.action_controller.default_protect_from_forgery = false
