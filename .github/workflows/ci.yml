@@ -5,6 +5,8 @@ on:
   push:
     branches: [ main ]
 
+# Ruby is pinned to the 3.4 series instead of .ruby-version: on newer runner images,
+# setup-ruby only builds the latest patch of each series, so an exact pin (3.4.1) 404s.
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
@@ -16,7 +18,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: "3.4"
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -32,7 +34,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: "3.4"
           bundler-cache: true
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
@@ -48,7 +50,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: "3.4"
           bundler-cache: true
 
       - name: Lint code for consistent style
