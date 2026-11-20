@@ -1,0 +1,17 @@
+# Keeps the tools CI depends on current, so CI doesn't fail because a tool is out of date.
+version: 2
+updates:
+  # bin/brakeman runs with --ensure-latest, so CI fails whenever a new
+  # Brakeman ships. Limited to Brakeman so this doesn't open a PR for every gem.
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-name: "brakeman"
+
+  # Updates the GitHub Actions used in .github/workflows (checkout, setup-ruby).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
