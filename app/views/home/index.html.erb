@@ -3,7 +3,7 @@
     <div class="row justify-content-center text-center mb-5">
       <div class="col-lg-8">
         <h1 class="display-4 fw-bold">Build Your Reputation. Take It Anywhere.</h1>
-        <p class="lead mt-3">RepBoard gives freelancers a portable, verified review profile they can share with any client - no platform lock-in. </p>
+        <p class="lead mt-3">RepBoard gives freelancers a portable review profile they can share with any client - no platform lock-in. </p>
         <% unless user_signed_in? %>
           <%= link_to "Get Started Free", new_user_registration_path, class: "btn btn-lg mt-3", style: "background-color: #028090; border-color: #028090; color:white;" %>
         <% end%>
@@ -18,7 +18,7 @@
   <div class="col-md-4 mb-4">
     <div class="card h-100 border-0 shadow-sm p-4">
       <p style="font-size: 1.6rem;">✅</p>
-      <h3 class="h5 fw-bold">Collect Verified Reviews</h3>
+      <h3 class="h5 fw-bold">Collect Client Reviews</h3>
       <p class="text-muted">Invite clients to leave a star rating and written review directly on your profile.</p>
     </div>
   </div>
@@ -49,7 +49,7 @@
       <li class="list-group-item"><strong>Sign up</strong> as a freelancer in under 2 minutes</li>
       <li class="list-group-item"><strong>Share your profile link</strong> with clients after each project</li>
       <li class="list-group-item"><strong>Clients leave a review</strong> - no account required to view your profile</li>
-      <li class="list-group-item"><strong>Win more business</strong> by showcasing your verified track record</li>
+      <li class="list-group-item"><strong>Win more business</strong> by showcasing your track record</li>
     </ol>
   </div>
 </div>
@@ -59,8 +59,7 @@
 <div class="row justify-content-center text-center my-5">
   <div class="col-lg-6">
     <h2>Ready to own your reputation?</h2>
-    <p>Join freelancers who use RepBoard to stand out and win more clients.</p>
-    <p class="text-muted mb-3"><strong>500+</strong> freelancers already building their reputation on RepBoard.</p>
+    <p>Create your free profile and start collecting client reviews.</p>
     <% unless user_signed_in? %>
       <%= link_to "Create your Profile Now", new_user_registration_path, class: "btn btn-lg mt-2", style: "background-color: #028090; border-color: #028090; color: white;" %>
     <% end %>
