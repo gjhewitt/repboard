@@ -1,6 +1,6 @@
 # RepBoard
 
-A portable reputation platform that lets freelancers collect structured client feedback and showcase a verified public profile.
+A portable reputation platform that lets freelancers collect structured client feedback and showcase a public profile.
 
 ## Setup Instructions
 
